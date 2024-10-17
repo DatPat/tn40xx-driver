@@ -339,8 +339,11 @@ static u32 bdx_mdio_scan_phy_id(struct bdx_priv *priv)
 	if (i == 32) {
 		dev_err(&priv->pdev->dev, "no PHY found\n");
 		return 0;
+	} else {
+		dev_err(&priv->pdev->dev, "phy_id %x\n", phy_id_hi << 16 | phy_id_lo);
 	}
 
+	dev_err(&priv->pdev->dev, "priv->phy_mdio_port %i\n", priv->phy_mdio_port);
 	priv->phy_mdio_port = i;
 
 	return phy_id_hi << 16 | phy_id_lo;
@@ -434,20 +437,24 @@ static enum PHY_TYPE bdx_phy_init(struct bdx_priv *priv)
 	    bdx_get_phy_by_id(pdev->vendor, pdev->device,
 			      pdev->subsystem_device);
 
-	if (phy_type == PHY_TYPE_NA)
+	if (phy_type == PHY_TYPE_NA) {
+		dev_err(&priv->pdev->dev, "NIC definition has no PHY");
 		return PHY_TYPE_NA;	/* NIC definition has no PHY. */
+	}
 
 	bdx_mdio_set_speed(priv->pBdxRegs, MDIO_SPEED_1MHZ);
 
 	phy_id = bdx_mdio_scan_phy_id(priv);	/* set phy_mdio_port */
 
-	if (!priv->phy_mdio_port)
-		return PHY_TYPE_NA;	/* No PHY detected on MDIO bus. */
-
+	if (!priv->phy_mdio_port && phy_id == PHY_TYPE_NA){
+	 	dev_err(&priv->pdev->dev, "No PHY detected on MDIO bus.");
+	 	return PHY_TYPE_NA;	/* No PHY detected on MDIO bus. */
+	}
 	/* register the PHY-specific callbacks */
 	priv->phy_type = bdx_phy_register(priv, phy_id, &desc);
 
 	if (priv->phy_type == PHY_TYPE_NA) {
+		dev_err(&priv->pdev->dev, "Unsupported PHY ID=%X", phy_id);
 		dev_info(&priv->pdev->dev, "Unsupported PHY ID=%X", phy_id);
 		return PHY_TYPE_NA;
 	}
@@ -460,8 +467,10 @@ static enum PHY_TYPE bdx_phy_init(struct bdx_priv *priv)
 
 	bdx_mdio_set_speed(priv->pBdxRegs, priv->phy_ops.mdio_speed);
 
-	if (priv->phy_ops.mdio_reset(priv, 1, priv->phy_type))
+	if (priv->phy_ops.mdio_reset(priv, 1, priv->phy_type)) {
+		dev_err(&priv->pdev->dev, "PHY reset failed");
 		return PHY_TYPE_NA;
+	}
 
 	return phy_type;
 }

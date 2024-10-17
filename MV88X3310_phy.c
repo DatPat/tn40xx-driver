@@ -266,6 +266,7 @@ __init int MV88X3310_mdio_reset(struct bdx_priv *priv, int port,
 	u16 expected_value = 0;
 
 #ifdef PHY_MV88X3310
+	port = 0;
 	if (priv->deviceId == 0x4027) {
 		phy_initdata = MV88X3310_phy_initdata;
 		phy_initdata_size =
@@ -289,7 +290,8 @@ __init int MV88X3310_mdio_reset(struct bdx_priv *priv, int port,
 		BDX_MDIO_WRITE(priv, 31, 0xF008, (val | 1 << 5));
 		val = bdx_mdio_read(priv, 31, port, 0xF001);
 		BDX_MDIO_WRITE(priv, 31, 0xF001, (val | 1 << 12));
-		msleep(250);
+		msleep(500);
+
 		if ((val = bdx_mdio_read(priv, 1, port, 0xC050)) != 0x000A) {
 			pr_err
 			    ("%s Initialization Error. Expected 0x000A, read 0x%04X\n",
@@ -299,6 +301,7 @@ __init int MV88X3310_mdio_reset(struct bdx_priv *priv, int port,
 		} else {
 			pr_debug("%s Initializing data...\n", PHY_NAME);
 		}
+
 		val = bdx_mdio_read(priv, 3, port, 0xD0F3);
 		BDX_MDIO_WRITE(priv, 3, 0xD0F0, 0);
 		BDX_MDIO_WRITE(priv, 3, 0xD0F1, 0x0010);

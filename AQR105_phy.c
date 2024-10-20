@@ -12,6 +12,7 @@ void AQR105_register_settings(struct bdx_priv *priv);
 int AQR105_mdio_reset(struct bdx_priv *priv, int port, unsigned short phy);
 u32 AQR105_link_changed(struct bdx_priv *priv);
 void AQR105_leds(struct bdx_priv *priv, enum PHY_LEDS_OP op);
+int AQR105_set_speed(struct bdx_priv *priv, s32 speed);
 
 int AQR105_set_speed(struct bdx_priv *priv, signed int speed)
 {

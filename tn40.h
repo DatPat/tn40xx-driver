@@ -799,6 +799,11 @@ enum PHY_TYPE CX4_register(struct bdx_priv *priv);
 enum PHY_TYPE TLK10232_register(struct bdx_priv *priv);
 enum PHY_TYPE AQR105_register(struct bdx_priv *priv);
 
+__init void CX4_register_settings(struct bdx_priv *priv);
+__init void TLK10232_register_settings(struct bdx_priv *priv);
+__init void AQR105_register_settings(struct bdx_priv *priv);
+__init void MV88X3310_register_settings(struct bdx_priv *priv);
+
 #ifndef vlan_tx_tag_present
 #define vlan_tx_tag_present skb_vlan_tag_present
 #endif

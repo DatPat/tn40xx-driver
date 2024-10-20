@@ -1,5 +1,8 @@
 #include "tn40.h"
 
+int TLK10232_get_link_ksettings(struct net_device *, struct ethtool_link_ksettings *);
+int TLK10232_set_link_ksettings(struct net_device *, const struct ethtool_link_ksettings *);
+
 int TLK10232_get_link_ksettings(struct net_device *netdev,
 				struct ethtool_link_ksettings *cmd)
 {
@@ -25,8 +28,7 @@ int TLK10232_get_link_ksettings(struct net_device *netdev,
 int TLK10232_set_link_ksettings(struct net_device *netdev,
 				const struct ethtool_link_ksettings *cmd)
 {
-	netdev_err(netdev, "Does not support ethtool -s option\n");
-
+	netdev_err(netdev, "%s Does not support ethtool -s option\n", __func__);
 	return -EPERM;
 }
 

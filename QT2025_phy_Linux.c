@@ -1,6 +1,8 @@
 #include "tn40.h"
 
-int QT2025_get_link_ksettings(struct net_device *netdev,
+void QT2025_register_settings(struct bdx_priv *priv);
+
+static int QT2025_get_link_ksettings(struct net_device *netdev,
 			      struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);
@@ -22,10 +24,10 @@ int QT2025_get_link_ksettings(struct net_device *netdev,
 	return 0;
 }
 
-int QT2025_set_link_ksettings(struct net_device *netdev,
+static int QT2025_set_link_ksettings(struct net_device *netdev,
 			      const struct ethtool_link_ksettings *cmd)
 {
-	netdev_err(netdev, "Does not support ethtool -s option\n");
+	netdev_err(netdev, "%s: Does not support ethtool -s option\n", __func__);
 	return -EPERM;
 }
 

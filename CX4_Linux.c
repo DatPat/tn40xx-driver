@@ -1,6 +1,6 @@
 #include "tn40.h"
 
-int CX4_get_link_ksettings(struct net_device *netdev,
+static int CX4_get_link_ksettings(struct net_device *netdev,
 			   struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);
@@ -23,7 +23,7 @@ int CX4_get_link_ksettings(struct net_device *netdev,
 	return 0;
 }
 
-int CX4_set_link_ksettings(struct net_device *netdev,
+static int CX4_set_link_ksettings(struct net_device *netdev,
 			   const struct ethtool_link_ksettings *cmd)
 {
 	pr_err("CX4_set_link_ksettings() not implemented\n");

@@ -22,7 +22,7 @@ static void AQR105_set_link_mode(unsigned long *bits, u32 speed)
 
 }
 
-int AQR105_get_link_ksettings(struct net_device *netdev,
+static int AQR105_get_link_ksettings(struct net_device *netdev,
 			      struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);
@@ -51,7 +51,7 @@ int AQR105_get_link_ksettings(struct net_device *netdev,
 	return 0;
 }
 
-int AQR105_set_link_ksettings(struct net_device *netdev,
+static int AQR105_set_link_ksettings(struct net_device *netdev,
 			      const struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);

@@ -882,7 +882,6 @@ static int bdx_fw_load(struct bdx_priv *priv)
 	master = READ_REG(priv, regINIT_SEMAPHORE);
 	if (!READ_REG(priv, regINIT_STATUS) && master) {
 		netdev_dbg(priv->ndev, "Loading FW...\n");
-
 		if(priv->pdev && request_firmware_direct(&fw_entry, "tehuti_fw.hdr", &priv->pdev->dev) == 0) {
 			bdx_tx_push_desc_safe(priv, (void*) fw_entry->data, (int) fw_entry->size);
 			release_firmware(fw_entry);

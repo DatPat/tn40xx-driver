@@ -46,6 +46,7 @@ void MV88X3310_register_settings(struct bdx_priv *priv);
 int MV88X3310_mdio_reset(struct bdx_priv *priv, int port, unsigned short phy);
 u32 MV88X3310_link_changed(struct bdx_priv *priv);
 void MV88X3310_leds(struct bdx_priv *priv, enum PHY_LEDS_OP op);
+int MV88X3310_set_speed(struct bdx_priv *priv, s32 speed);
 
 int MV88X3310_set_speed(struct bdx_priv *priv, signed int speed)
 {

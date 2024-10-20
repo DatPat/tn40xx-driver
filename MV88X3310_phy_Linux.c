@@ -1,10 +1,15 @@
 #include "tn40.h"
 
 int MV88X3310_set_speed(struct bdx_priv *priv, s32 speed);
+void MV88X3310_set_link_mode(unsigned long *bits, u32 speed);
+static int MV88X3310_get_link_ksettings(struct net_device *,
+				 struct ethtool_link_ksettings *);
+static int MV88X3310_set_link_ksettings(struct net_device *,
+				 const struct ethtool_link_ksettings *);
 
 #define MV88X3310_ALL_SPEEDS	(__ETHTOOL_LINK_MODE_MASK_NBITS)
 
-static void MV88X3310_set_link_mode(unsigned long *bits, u32 speed)
+void MV88X3310_set_link_mode(unsigned long *bits, u32 speed)
 {
 	bitmap_zero(bits, __ETHTOOL_LINK_MODE_MASK_NBITS);
 	__set_bit(ETHTOOL_LINK_MODE_Pause_BIT, bits);
@@ -22,7 +27,7 @@ static void MV88X3310_set_link_mode(unsigned long *bits, u32 speed)
 
 }
 
-int MV88X3310_get_link_ksettings(struct net_device *netdev,
+static int MV88X3310_get_link_ksettings(struct net_device *netdev,
 				 struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);
@@ -51,7 +56,7 @@ int MV88X3310_get_link_ksettings(struct net_device *netdev,
 	return 0;
 }
 
-int MV88X3310_set_link_ksettings(struct net_device *netdev,
+static int MV88X3310_set_link_ksettings(struct net_device *netdev,
 				 const struct ethtool_link_ksettings *cmd)
 {
 	struct bdx_priv *priv = netdev_priv(netdev);

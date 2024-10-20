@@ -10,6 +10,7 @@
 
 #include "tn40.h"
 #include "tn40_fw.h"
+#include <linux/firmware.h>
 
 static void bdx_scan_pci(void);
 
@@ -876,11 +877,19 @@ static int bdx_fw_load(struct bdx_priv *priv)
 {
 	int master, i;
 	int rVal = 0;
+	const struct firmware* fw_entry = NULL;
 
 	master = READ_REG(priv, regINIT_SEMAPHORE);
 	if (!READ_REG(priv, regINIT_STATUS) && master) {
 		netdev_dbg(priv->ndev, "Loading FW...\n");
-		bdx_tx_push_desc_safe(priv, s_firmLoad, sizeof(s_firmLoad));
+
+		if(priv->pdev && request_firmware_direct(&fw_entry, "tehuti_fw.hdr", &priv->pdev->dev) == 0) {
+			bdx_tx_push_desc_safe(priv, (void*) fw_entry->data, (int) fw_entry->size);
+			release_firmware(fw_entry);
+		} else {
+			netdev_err(priv->ndev, "tehuti_fw.hdr was not found trying baked in firmware...\n");
+			bdx_tx_push_desc_safe(priv, s_firmLoad, sizeof(s_firmLoad));
+		}
 		mdelay(100);
 	}
 	for (i = 0; i < 200; i++) {
@@ -2044,7 +2053,7 @@ static int is_csum_err(struct bdx_priv *priv, char *pkt, u32 rxd_err, u16 len)
 		return 0;	/* Frame check sequence error, not checksum */
 
 	if (rxd_err == RXD_ERR_UDP_CSUM && udp->check == 0) {
-		netdev_warn(priv->ndev, "false rxd_err = 0x%x\n", rxd_err);
+		netdev_warn(priv->ndev, "False rxd_err = 0x%x\n", rxd_err);
 		return 0;
 	}
 

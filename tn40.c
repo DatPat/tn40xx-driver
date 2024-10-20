@@ -467,7 +467,7 @@ static enum PHY_TYPE bdx_phy_init(struct bdx_priv *priv)
 
 	bdx_mdio_set_speed(priv->pBdxRegs, priv->phy_ops.mdio_speed);
 
-	if (priv->phy_ops.mdio_reset(priv, 1, priv->phy_type)) {
+	if (priv->phy_ops.mdio_reset(priv, priv->phy_mdio_port, priv->phy_type)) {
 		dev_err(&priv->pdev->dev, "PHY reset failed");
 		return PHY_TYPE_NA;
 	}

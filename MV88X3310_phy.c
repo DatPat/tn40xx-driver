@@ -266,7 +266,6 @@ __init int MV88X3310_mdio_reset(struct bdx_priv *priv, int port,
 	u16 expected_value = 0;
 
 #ifdef PHY_MV88X3310
-	port = 0;
 	if (priv->deviceId == 0x4027) {
 		phy_initdata = MV88X3310_phy_initdata;
 		phy_initdata_size =
